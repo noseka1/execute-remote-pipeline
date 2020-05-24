@@ -1,6 +1,6 @@
 # Execute Remote Pipeline
 
-This Tekton task executes a Tekton pipeline that is located on a remote OpenShift cluster. The task will tail output of the remote pipeline while the remote pipeline is executing.
+This Tekton task executes a Tekton pipeline that is located on a remote OpenShift cluster. The task will tail the output of the remote pipeline while the remote pipeline is executing.
 
 On the remote OpenShift cluster, you will need to create a service account that will be used for starting the pipeline:
 
