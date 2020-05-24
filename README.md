@@ -19,7 +19,7 @@ $ oc sa get-token pipeline-starter
 On the local OpenShift cluster, create a secret that holds the token:
 
 ```
-$ oc create secret generic --from-literal=openshift-token=INSERT_TOKEN_HERE
+$ oc create secret generic --from-literal=openshift-token=INSERT_TOKEN_HERE pipeline-starter
 ```
 
 Use the *execute-remote-pipeline* task in your pipeline to execute the pipeline on the remote cluster, for example:
