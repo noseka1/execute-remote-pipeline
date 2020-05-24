@@ -1,0 +1,14 @@
+apiVersion: tekton.dev/v1alpha1
+kind: Task
+metadata:
+  name: remote
+  namespace: remote-pipeline
+spec:
+  steps:
+  - name: remote-step
+    image: registry.access.redhat.com/ubi8/ubi
+    command:
+    - /bin/bash
+    - -c
+    - |
+      echo Running on remote cluster

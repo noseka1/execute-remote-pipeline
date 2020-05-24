@@ -1,0 +1,11 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: remote
+  namespace: remote-pipeline
+spec:
+  tasks:
+  - name: remote
+    taskRef:
+      kind: Task
+      name: remote
