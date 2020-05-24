@@ -8,7 +8,7 @@ On the remote OpenShift cluster, you will need to create a service account that 
 $ oc create sa pipeline-starter
 ```
 
-Make sure that this service account has sufficient permissions to execute the pipeline. Refer to the example for the role that includes the minimum premissions required.
+Make sure that this service account has sufficient permissions to execute the pipeline. Find an example in this repo that includes a role with minimum premissions required.
 
 Obtain an authentication token for the service account:
 
