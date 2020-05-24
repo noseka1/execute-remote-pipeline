@@ -1,0 +1,69 @@
+apiVersion: tekton.dev/v1alpha1
+kind: Task
+metadata:
+  name: execute-remote-pipeline
+spec:
+  params:
+  - name: pipeline-name
+    type: string
+    description: Name of the pipeline to execute
+  - name: pipeline-namespace
+    type: string
+    description: Which namespace is the pipeline located in?
+  - name: openshift-server-url
+    type: string
+    description: URL of the remote OpenShift API server
+  - name: openshift-token-secret
+    type: string
+    description: Name of the secret holding the authentication token
+  steps:
+  - name: execute-remote-pipeline-step
+    command:
+    - /bin/bash
+    args:
+    - -c
+    - |
+      set -e
+
+      if [ -z "$OPENSHIFT_TOKEN" ]; then
+        echo OPENSHIFT_TOKEN is empty
+        exit 1
+      fi
+
+      oc login \
+        --token "$OPENSHIFT_TOKEN" \
+        "$(params.openshift-server-url)"
+
+      PIPELINERUN=$(
+        tkn pipeline start \
+          --namespace $(params.pipeline-namespace) \
+          $(params.pipeline-name) \
+          | sed --quiet 's/Pipelinerun started: \(.*\)/\1/p'
+      )
+
+      tkn pipelinerun logs \
+        --namespace $(params.pipeline-namespace) \
+        --follow "$PIPELINERUN"
+
+      STATUS=$(
+        oc get pipelinerun \
+          --namespace $(params.pipeline-namespace) \
+          "$PIPELINERUN" \
+          --output jsonpath='{.status.conditions[?(@.type=="Succeeded")].status}'
+      )
+
+      if [ "$STATUS" != True ]; then
+        echo "Remote pipeline failed:"
+        oc get pipelinerun \
+          --namespace $(params.pipeline-namespace) \
+          "$PIPELINERUN" \
+          --output jsonpath='{.status.conditions[?(@.type=="Succeeded")].message}'
+        exit 1
+      fi
+    image: quay.io/noseka1/execute-remote-pipeline:latest
+    env:
+    - name: OPENSHIFT_TOKEN
+      valueFrom:
+        secretKeyRef:
+          name: $(params.openshift-token-secret)
+          key: openshift-token
