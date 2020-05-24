@@ -22,7 +22,7 @@ On the local OpenShift cluster, create a secret that holds the token:
 $ oc create secret generic --from-literal=openshift-token=INSERT_TOKEN_HERE
 ```
 
-Use the *execute-remote-pipeline* task in your pipeline, for example:
+Use the *execute-remote-pipeline* task in your pipeline to execute the pipeline on the remote cluster, for example:
 
 ```
 apiVersion: tekton.dev/v1beta1
