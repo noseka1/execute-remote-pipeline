@@ -16,7 +16,7 @@ Obtain an authentication token for the service account:
 $ oc sa get-token pipeline-starter
 ```
 
-On the local OpenShift cluster, create a secret that holds the token:
+On the local OpenShift cluster, create a secret that will hold the token:
 
 ```
 $ oc create secret generic --from-literal=openshift-token=INSERT_TOKEN_HERE pipeline-starter
